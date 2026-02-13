@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine Surprise</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    /* Font မပြောင်းမှာစိုးလို့ ဒီမှာပါ တစ်ခါတည်း ထည့်ပေးထားပါတယ် */
+    .universe-text {
+      font-family: 'Dancing Script', cursive !important;
+      font-size: 18px !important;
+      color: black;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bg-image-container"></div>
+
+  <audio id="myAudio">
+    <source src="music/music.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="message-text">
+    <h1 id="title">Happy Valentine's Day!</h1>
+    <p id="desc">Sending a little something for you...</p>
+  </div>
+
+  <div class="envelope-wrapper" id="envelope">
+    <div class="flap"></div>
+    <div class="envelope-front"></div>
+    
+    <div class="letter">
+      <h2 style="color: #e63946; margin: 0;">Lots of love!</h2>
+      <p class="universe-text">I Love You in Every Universe ❤️</p>
+    </div>
+
+    <div class="heart-click" onclick="openEnvelope()">
+      <i class="ri-heart-fill"></i>
+      <span>click</span>
+    </div>
+
+    <button class="close-btn" onclick="closeEnvelope()">close envelope</button>
+    <div id="hearts-container"></div>
+  </div>
+
+<script>
+    const envelope = document.getElementById('envelope');
+    const audio = document.getElementById("myAudio");
+    const bgContainer = document.getElementById('bg-image-container');
+    
+    let heartTimer;
+    let heartPos = 10;
+    let currentImgIndex = 0;
+
+    const coupleImages = [
+      'image/pic1.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic2.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic3.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic4.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic5.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic6.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic7.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic8.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic9.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic10.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic11.jpg', // သင့်ပုံလမ်းကြောင်း
+      'image/pic12.jpg' // သင့်ပုံလမ်းကြောင်း
+    ];
+function createBackgroundHearts() {
+    bgContainer.innerHTML = ''; 
+    const isMobile = window.innerWidth < 600; // ဖုန်းလား၊ ကွန်ပျူတာလား စစ်မယ်
+    const numberOfHearts = isMobile ? 12 : 25; // ဖုန်းဆိုရင် ၁၂ ပုံပဲ ပြမယ် (အရမ်းမရှုပ်အောင်)
+
+    for (let i = 0; i < numberOfHearts; i++) {
+        const frame = document.createElement('div');
+        frame.className = 'small-heart-frame';
+        
+        let posX, posY;
+
+        if (i < numberOfHearts / 2) {
+            // ဘယ်ဘက်ခြမ်း (ဖုန်းဆိုရင် 5% ကနေ 25% ကြားပဲ ထားမယ်)
+            posX = isMobile ? (2 + Math.random() * 20) : (10 + Math.random() * 25);
+        } else {
+            // ညာဘက်ခြမ်း (ဖုန်းဆိုရင် 75% ကနေ 95% ကြားပဲ ထားမယ်)
+            posX = isMobile ? (75 + Math.random() * 20) : (65 + Math.random() * 25);
+        }
+        
+        posY = (i % 6) * 15 + (Math.random() * 10); 
+
+        frame.style.left = posX + '%';
+        frame.style.top = posY + '%';
+
+        const imgIndex = i % coupleImages.length;
+        frame.style.backgroundImage = `url('${coupleImages[imgIndex]}')`;
+
+        // အရွယ်အစားကို ဖုန်းအတွက် ချိန်ညှိမယ်
+        const baseSize = isMobile ? 50 : 80;
+        const randomSize = baseSize + Math.random() * 30;
+        frame.style.width = `${randomSize}px`;
+        frame.style.height = `${randomSize}px`;
+        
+        const duration = 3 + Math.random() * 2;
+        const delay = Math.random() * 3;
+        frame.style.animationDuration = `${duration}s`;
+        frame.style.animationDelay = `${delay}s`;
+
+        bgContainer.appendChild(frame);
+    }
+}
+
+    function openEnvelope() {
+      envelope.classList.add('open');
+      document.getElementById('title').innerText = "For You ❤️";
+      audio.play().catch(e => console.log("Play blocked."));
+      
+      // စာအိတ်ပေါ်က ပျံတက်မယ့် အသည်းအမှုန်လေးများ
+      heartTimer = setInterval(createSingleHeart, 100); 
+
+      // နောက်ခံပုံလေးများ ပေါ်လာစေခြင်း
+      bgContainer.classList.add('bg-show');
+      createBackgroundHearts(); 
+    }
+
+    function closeEnvelope() {
+      envelope.classList.remove('open');
+      document.getElementById('title').innerText = "Happy Valentine's Day!";
+      audio.pause();
+      audio.currentTime = 0;
+      clearInterval(heartTimer);
+      document.getElementById('hearts-container').innerHTML = '';
+      bgContainer.classList.remove('bg-show'); 
+      heartPos = 10;
+    }
+
+    function createSingleHeart() {
+      const container = document.getElementById('hearts-container');
+      const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffffff'];
+      const heart = document.createElement('i');
+      heart.className = 'ri-heart-fill heart-particle';
+      heart.style.left = heartPos + '%'; 
+      heartPos += 8; 
+      if (heartPos > 90) heartPos = 10;
+      heart.style.top = '45%';
+      heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+      heart.style.fontSize = (Math.random() * 5 + 15) + 'px';
+      
+      heart.style.animation = `flyUp ${2.5 + Math.random() * 1}s ease-out forwards`;
+      
+      container.appendChild(heart);
+      setTimeout(() => heart.remove(), 3500);
+    }
+</script>
+ 
+</body>
+</html>

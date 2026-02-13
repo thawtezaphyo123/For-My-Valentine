@@ -1,0 +1,220 @@
+:root {
+  --bg-color: #f8adac;
+  --env-color: #f3e5d8;
+  --env-dark: #dcc8b5;
+  --heart: #e63946;
+}
+
+body {
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+.message-text { text-align: center; margin-bottom: 40px; color: #590d22; }
+
+/* Envelope Container */
+.envelope-wrapper {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background-color: var(--env-color);
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+/* စာအိတ်ရဲ့ ရှေ့မျက်နှာပြင် */
+.envelope-front {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 150px solid var(--env-color);
+  border-right: 150px solid var(--env-color);
+  border-top: 100px solid transparent;
+  border-bottom: 100px solid var(--env-color);
+  z-index: 4;
+  filter: brightness(0.95);
+}
+
+/* စာအိတ်အဖုံး */
+.flap {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+  border-top: 110px solid var(--env-dark);
+  transform-origin: top;
+  transition: transform 0.6s ease-in-out;
+  z-index: 5;
+}
+
+/* စာလွှာ */
+.letter {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  width: 280px;
+  height: 180px;
+  background: white;
+  text-align: center;
+  transition: transform 0.6s ease-in-out;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* အသည်းပုံ Click ခလုတ် */
+.heart-click {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--heart);
+  font-size: 55px;
+  z-index: 6;
+  cursor: pointer;
+  text-align: center;
+}
+
+.heart-click span {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background: var(--heart);
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-top: -5px;
+}
+
+/* ဖွင့်လိုက်ချိန် ပုံစံများ */
+.open .flap { transform: rotateX(180deg); z-index: 1; }
+.open .letter { transform: translateY(-120px); z-index: 3; }
+.open .heart-click { display: none; }
+
+/* ပိတ်တဲ့ခလုတ် */
+.close-btn {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  background: rgba(230, 57, 70, 0.8);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: 0.3s;
+  z-index: 10;
+}
+.open .close-btn { opacity: 1; }
+
+@keyframes flyUp { 
+  0% { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+  } 
+  100% { 
+    /* အလျားလိုက် တန်းစီလျက်သားအတိုင်း အပေါ်ကို တက်သွားမယ် */
+    transform: translateY(-500px) scale(1.5); 
+    opacity: 0; 
+  } 
+}
+
+.heart-particle {
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#bg-image-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* စာအိတ်နောက်ရောက်အောင် ထားတာ */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.bg-show { opacity: 1 !important; }
+
+/* အသည်းပုံ Frame သေးသေးလေးများ */
+.small-heart-frame {
+  position: absolute;
+  width: 100px;  /* ပုံအရွယ်အစားကို ဒီမှာ သေးထားတယ် */
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  /* အသည်းပုံ mask */
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  transition: transform 0.5s ease;
+}
+
+/* စာအိတ်ဖွင့်ရင် ပေါ်လာမယ့် style */
+.bg-show {
+  opacity: 1 !important;
+}
+
+/* ပုံလေးတွေ လွင့်နေစေမယ့် Animation အသစ် (ဒါကို CSS အောက်ဆုံးမှာ ထည့်ပါ) */
+@keyframes floatPhoto {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* အရင်ရှိပြီးသား .small-heart-frame ထဲမှာ animation စာကြောင်းတစ်ကြောင်းပဲ တိုးလိုက်တာပါ */
+.small-heart-frame {
+  animation: floatPhoto 3s ease-in-out infinite;
+}
+
+/* ဖုန်းမှာ ကြည့်တဲ့အခါ ပုံစံပြောင်းလဲဖို့ */
+@media screen and (max-width: 600px) {
+  /* စာအိတ်ကို ဖုန်းမှာ နည်းနည်း သေးလိုက်မယ် */
+  .envelope-wrapper {
+    width: 250px;
+    height: 160px;
+  }
+  .envelope-front {
+    border-left-width: 125px;
+    border-right-width: 125px;
+  }
+  .flap {
+    border-left-width: 125px;
+    border-right-width: 125px;
+  }
+  .letter {
+    width: 230px;
+    height: 140px;
+  }
+  .open .letter {
+    transform: translateY(-80px); /* စာလွှာ အပေါ်တက်တာ နည်းနည်း လျှော့မယ် */
+  }
+
+  /* ဖုန်းမှာ အသည်းပုံ Frame လေးတွေကို သေးလိုက်မယ် (ဒါမှ စာအိတ်ကို မကွယ်မှာပါ) */
+  .small-heart-frame {
+    width: 60px !important; /* အကြီးတွေကို 60px ထိ လျှော့လိုက်မယ် */
+    height: 60px !important;
+  }
+}
+
