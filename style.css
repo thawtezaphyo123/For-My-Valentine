@@ -224,7 +224,23 @@ body {
     padding: 0 10px; /* ဘေးဘက်စာသားများ မကပ်စေရန် */
     line-height: 1.2;
   }
+
+    .message-text {
+    padding: 0 20px !important; /* ဘယ်ညာကို 20px စီ ခြားလိုက်တာပါ */
+    margin-bottom: 20px !important;
+  }
+
+    .message-text p {
+    font-size: 14px !important;
+    margin-top: 10px !important;
+  }
+
+    .message-text h1 {
+    font-size: 24px !important; /* စာလုံးဆိုဒ်ကို ဖုန်းနဲ့ မျှအောင် နည်းနည်း လျှော့လိုက်ပါ */
+    white-space: normal !important; /* စာသားရှည်ရင် အောက်ကြောင်း ဆင်းသွားအောင်ပါ */
+  }
 }
+
 
 
 
